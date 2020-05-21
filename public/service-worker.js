@@ -3,8 +3,12 @@ const FILES_TO_CACHE = [
     "/index.html",
     "/styles.css",
     "/index.js",
+    "/db.js",
+    "/manifest.json",
     "/icons/icon-192x192.png",
-    "/icons/icon-512x512.png"
+    "/icons/icon-512x512.png",
+    "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
+    "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 ];
 
 const CACHE_NAME = "static-cache-v2";
@@ -68,6 +72,24 @@ self.addEventListener("fetch", function(evt) {
   evt.respondWith(
     caches.match(evt.request).then(function(response) {
       return response || fetch(evt.request);
+    }).catch(function() {
+        return caches.match("/");
     })
   );
+// evt.respondWith(
+//     caches.match(evt.request).then(cachedResponse => {
+//       if (cachedResponse) {
+//         return cachedResponse;
+//       }
+
+//       // request is not in cache. make network request and cache the response
+//       return caches.open(DATA_CACHE_NAME).then(cache => {
+//         return fetch(evt.request).then(response => {
+//           return cache.put(evt.request, response.clone()).then(() => {
+//             return response;
+//           });
+//         });
+//       });
+//     })
+//   );
 });
